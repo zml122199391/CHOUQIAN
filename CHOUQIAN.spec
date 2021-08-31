@@ -4,7 +4,7 @@
 block_cipher = None
 
 
-a = Analysis(['CHOUQIAN.py'],
+a = Analysis(['CHOUQIAN.PY'],
              pathex=['E:\\CHOUQIAN'],
              binaries=[],
              datas=[],

@@ -11,20 +11,18 @@ window.title('抽签')
 # 窗口大小
 window.minsize(800, 600)
 # 将待选的公司名称放入列表中
-name_list = ['公司1', '公司2', '公司3', '公司4', '公司5', '公司6',
-             '公司7', '公司8', '公司9', '公司10', '公司11', '公司12',
-             '公司13', '公司14', '公司15', '公司16', '公司17', '公司18']
+name_list = ['1', '2', '3', '4', '5', '6']
 # 设置结果组，每一次抽签界面上最终展示的元素索引
 winner = []
 # 设置内定组，若该组立存在元素（为列表下标），则组内元素按照顺序优先在界面上显示
-neiding = [0, 17, 1, 9, 13, 15]
+neiding = [0]
 
 # 创建一个空列表，用来放置做好的按钮
 btn_list = []
 # 循环遍历公司列表的长度
 for i in range(len(name_list)):
     # 设置按钮，传入公司姓名作为按钮上显示的文本，设置字体，设置按钮颜色为白色
-    button = tk.Button(window, text=name_list[i], font=('SimSun 15 bold'), bg='white')
+    button = tk.Button(window, text=name_list[i], font=('SimSun 12 bold'), bg='white')
     # 将按钮添加入按钮列表
     btn_list.append(button)
     # 按行摆放按钮，因为每行摆放6个，所以对6进行取商和余数。
@@ -78,7 +76,7 @@ def round():
                 i = neiding[len(winner)]
                 allWhite()
                 btn_list[i]['bg'] = 'red'
-            tk.messagebox.showinfo('抽签结果', message='{}成为本轮出演者'.format(btn_list[i]['text']))
+            tk.messagebox.showinfo('抽签结果', message='本轮抽签学校抽到的演出顺序为：{}'.format(btn_list[i]['text']))
 
             break
         # 重新将i赋值一个随机坐标，目的是为了让抽签时每次都是随机选中按钮的
