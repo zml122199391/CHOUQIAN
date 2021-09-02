@@ -1,0 +1,104 @@
+# 导入tkinter模块
+import tkinter as tk
+import threading
+from time import sleep
+from random import randint
+from tkinter import messagebox
+
+# 创建窗口对象
+window = tk.Tk()
+window.title('抽签')
+# 窗口大小
+window.minsize(1000, 800)
+# 将待选的公司名称放入列表中
+name_list = ['1', '2', '3', '4', '5', '6',
+             '7', '8', '9', '10', '11', '12',
+             '13', '14', '15', '16', '17', '18',
+             '19', '20', '21', '22', '23', '24',
+             '25', '26', '27']
+# 设置结果组，每一次抽签界面上最终展示的元素索引
+winner = []
+# 设置内定组，若该组立存在元素（为列表下标），则组内元素按照顺序优先在界面上显示
+neiding = [0, 5, 2, 10, 12, 3, 4, 14, 23, 13, 22, 6, 20, 1, 24, 17, 7, 21, 8, 0, 25, 15, 11, 18, 26, 16, 9, 19]
+
+# 创建一个空列表，用来放置做好的按钮
+btn_list = []
+# 循环遍历公司列表的长度
+for i in range(len(name_list)):
+    # 设置按钮，传入公司姓名作为按钮上显示的文本，设置字体，设置按钮颜色为白色
+    button = tk.Button(window, text=name_list[i], font=('SimSun 12 bold'), bg='white')
+    # 将按钮添加入按钮列表
+    btn_list.append(button)
+    # 按行摆放按钮，因为每行摆放6个，所以对6进行取商和余数。
+    # 根据每行摆放按钮数量不同可以更改
+    y, x = divmod(i, 6)
+    # 放置按钮，位置会随着i的值变化，依次摆放
+    button.place(x=120 + x * 120, y=120 + y * 120, width=120, height=120)
+
+
+def allWhite():
+    for x in btn_list:
+        x['bg'] = 'white'
+
+
+def round():
+    m = len(btn_list)
+
+    # 点击按钮后，判断按钮显示的文本，然后换成相反的
+    if btn_start['text'] == '开始':
+        btn_start['text'] = '停止'
+        # 判断内定组的长度和结果组的长度
+        # 如果内定组大于结果组，则把内定组排在最前面的元素放入结果组，直到内定组元素被抽完
+        if len(neiding) > len(winner):
+            winner.append(neiding[len(winner)])
+
+
+    else:
+        # 如果点击按钮时，显示的文本是‘停止’，就会跳出函数。
+        btn_start['text'] = '开始'
+        return
+    # 设置按钮列表的长度，也就是公司数量
+
+    # 随机生成i的值，i将会作为按钮列表的索引值
+    # 也就是点击开始按钮时会随机开始
+
+    i = randint(0, m - 1)
+
+    while True:
+        # 遍历所有的按钮，将所有的组件背景变为白色
+
+        for x in btn_list:
+            x['bg'] = 'white'
+        # 将当前数值对应的组件的背景颜色设置成红色，表示选中的状态
+        btn_list[i]['bg'] = 'red'
+
+        # 判断按钮显示的文本是否是‘开始’，
+        # 因为只有点击停止按钮时显示文本才会变成‘开始’，弹窗出现，跳出循环
+        if btn_start['text'] == '开始':
+            # 设置弹窗，使用showinfo函数展示中奖信息
+            if len(neiding) > len(winner):
+                i = neiding[len(winner)]
+                allWhite()
+                btn_list[i]['bg'] = 'red'
+            tk.messagebox.showinfo('抽签结果', message='本轮抽签学校抽到的演出顺序为：{}'.format(btn_list[i]['text']))
+
+            break
+        # 重新将i赋值一个随机坐标，目的是为了让抽签时每次都是随机选中按钮的
+        i = randint(0, m - 1)
+        # 延时，可以更改时间控制速度
+        sleep(0.01)
+
+
+# 创建线程的函数
+def newtask():
+    # 创建线程并运行，target传入开始抽签的函数
+    t = threading.Thread(target=round)
+    t.start()
+
+
+# 设置开始按钮，commond传入点击按钮时执行的函数
+btn_start = tk.Button(window, text='开始', font=('SimSun 15 bold'), command=newtask)
+# 放置开始按钮
+btn_start.place(x=600, y=650, width=200, height=80)
+# 事件循环，保持窗口不会关闭
+window.mainloop()
